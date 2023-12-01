@@ -58,6 +58,10 @@ class SignInFragment : BaseFragment<FragmentSigninBinding>(R.layout.fragment_sig
     }
 
     private fun navigateToSignup() {
-        findNavController().navigate(R.id.action_loginFragment_to_signupFragment)
+        findNavController().run {
+            if (currentDestination?.id != R.id.signupFragment) {
+                navigate(R.id.action_loginFragment_to_signupFragment)
+            }
+        }
     }
 }
