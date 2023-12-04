@@ -23,6 +23,15 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"/>
 
+        <Button
+            android:id="@+id/btn_save_posts"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="게시글 저장"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/btn_create_post" />
+
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
