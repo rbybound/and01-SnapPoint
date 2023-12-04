@@ -6,6 +6,7 @@ import androidx.lifecycle.viewModelScope
 import com.boostcampwm2023.snappoint.data.local.converter.PostConverter
 import com.boostcampwm2023.snappoint.data.local.entity.LocalPost
 import com.boostcampwm2023.snappoint.data.local.entity.SerializedPost
+import com.boostcampwm2023.snappoint.data.mapper.asPostSummaryState
 import com.boostcampwm2023.snappoint.data.repository.LocalPostRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
@@ -23,7 +24,8 @@ class SubscriptionViewModel @Inject constructor(
 
     fun insertPost(localPost: LocalPost) {
         viewModelScope.launch(Dispatchers.IO) {
-            localPostRepository.insertPosts(SerializedPost(PostConverter.postToJson(localPost)))
+            // TODO insert 삭제, delete 추가
+            localPostRepository.insertPosts(SerializedPost(PostConverter.postToJson(localPost)).asPostSummaryState())
         }
     }
 
