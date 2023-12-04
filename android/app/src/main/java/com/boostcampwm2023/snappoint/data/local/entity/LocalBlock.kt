@@ -10,7 +10,7 @@ data class LocalBlock(
     @SerialName("content")
     val content: String,
     @SerialName("description")
-    val description: String,
+    val description: String = "",
     @SerialName("position")
     val position: LocalPosition = LocalPosition(),
     @SerialName("address")
