@@ -1,5 +1,10 @@
 package com.boostcampwm2023.snappoint.data.mapper
 
+import com.boostcampwm2023.snappoint.data.local.converter.PostConverter
+import com.boostcampwm2023.snappoint.data.local.entity.LocalBlock
+import com.boostcampwm2023.snappoint.data.local.entity.LocalPosition
+import com.boostcampwm2023.snappoint.data.local.entity.LocalPost
+import com.boostcampwm2023.snappoint.data.local.entity.SerializedPost
 import com.boostcampwm2023.snappoint.data.remote.model.BlockType
 import com.boostcampwm2023.snappoint.data.remote.model.File
 import com.boostcampwm2023.snappoint.data.remote.model.PostBlock
@@ -80,5 +85,88 @@ fun GetAroundPostResponse.asPostSummaryState(): PostSummaryState {
         author = "",
         timeStamp = this.createdAt,
         postBlocks = this.blocks.map { it.asPostBlockState() }
+    )
+}
+
+fun SerializedPost.asPostSummaryState(): PostSummaryState {
+    val localPost = PostConverter.jsonToPost(this.json)
+    return PostSummaryState(
+        title = localPost.title,
+        author = localPost.author,
+        timeStamp = localPost.timestamp,
+        postBlocks = localPost.blocks.map { it.asPostBlockState() }
+    )
+}
+
+fun LocalBlock.asPostBlockState(): PostBlockState {
+    return when (this.typeOrdinal) {
+        PostBlockState.ViewType.IMAGE.ordinal -> PostBlockState.IMAGE(
+            content = this.content,
+            description = this.description,
+            position = this.position.asPositionState(),
+            address = this.address
+        )
+
+        PostBlockState.ViewType.VIDEO.ordinal -> PostBlockState.VIDEO(
+            content = this.content,
+            description = this.description,
+            position = this.position.asPositionState(),
+            address = this.address
+        )
+
+        else -> PostBlockState.IMAGE(
+            content = this.content,
+            description = this.description
+        )
+    }
+}
+
+fun LocalPosition.asPositionState(): PositionState {
+    return PositionState(
+        latitude = this.latitude,
+        longitude = this.longitude
+    )
+}
+
+fun PostSummaryState.asSerializedPost(): SerializedPost {
+    return SerializedPost(
+        PostConverter.postToJson(
+            LocalPost(
+                title = this.title,
+                author = this.author,
+                timestamp = this.timeStamp,
+                blocks = this.postBlocks.map { it.asLocalBlock() }
+            )
+        )
+    )
+}
+
+fun PostBlockState.asLocalBlock(): LocalBlock {
+    return when(this) {
+        is PostBlockState.IMAGE -> LocalBlock(
+            typeOrdinal = PostBlockState.ViewType.IMAGE.ordinal,
+            content = this.content,
+            description = this.description,
+            position = this.position.asLocalPosition(),
+            address = this.address
+        )
+        is PostBlockState.VIDEO -> LocalBlock(
+            typeOrdinal = PostBlockState.ViewType.VIDEO.ordinal,
+            content = this.content,
+            description = this.description,
+            position = this.position.asLocalPosition(),
+            address = this.address
+        )
+        else -> LocalBlock(
+            typeOrdinal = PostBlockState.ViewType.TEXT.ordinal,
+            content = this.content
+        )
+    }
+}
+
+fun PositionState.asLocalPosition(): LocalPosition {
+    return LocalPosition(
+        latitude = this.latitude,
+        longitude = this.longitude
     )
 }
