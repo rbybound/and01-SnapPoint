@@ -23,6 +23,24 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"/>
 
+        <Button
+            android:id="@+id/btn_insert_local_post"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="INSERT"
+            app:layout_constraintTop_toBottomOf="@+id/btn_create_post"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"/>
+
+        <Button
+            android:id="@+id/btn_get_local_post"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="SELECT"
+            app:layout_constraintTop_toBottomOf="@+id/btn_insert_local_post"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"/>
+
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

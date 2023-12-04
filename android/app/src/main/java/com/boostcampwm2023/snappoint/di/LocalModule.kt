@@ -24,7 +24,7 @@ object LocalModule {
         Room.databaseBuilder(
             context,
             LocalPostDatabase::class.java,
-            "database",
+            "database01",
         ).build()
 
     @Provides
