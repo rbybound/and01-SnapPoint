@@ -3,6 +3,7 @@ package com.boostcampwm2023.snappoint.presentation.viewpost.post
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.boostcampwm2023.snappoint.data.repository.LocalPostRepository
+import com.boostcampwm2023.snappoint.presentation.model.PostBlockState
 import com.boostcampwm2023.snappoint.presentation.model.PostSummaryState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
@@ -33,17 +34,19 @@ class PostViewModel @Inject constructor(
     }
 
     fun onFabClick() {
+        _event.tryEmit(PostEvent.SavePost)
+    }
+
+    fun saveCurrentPost(title: String, author: String, timeStamp: String, postBlocks: List<PostBlockState>) {
         viewModelScope.launch(Dispatchers.IO) {
-            with(uiState.value) {
-                localPostRepository.insertPosts(
-                    PostSummaryState(
-                        title = title,
-                        author = author,
-                        timeStamp = timestamp,
-                        postBlocks = posts
-                    )
+            localPostRepository.insertPosts(
+                PostSummaryState(
+                    title = title,
+                    author = author,
+                    timeStamp = timeStamp,
+                    postBlocks = postBlocks
                 )
-            }
+            )
         }
     }
 }

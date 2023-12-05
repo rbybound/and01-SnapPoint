@@ -5,12 +5,14 @@ import android.view.View
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.viewModelScope
 import androidx.navigation.fragment.findNavController
 import com.boostcampwm2023.snappoint.R
 import com.boostcampwm2023.snappoint.databinding.FragmentPostBinding
 import com.boostcampwm2023.snappoint.presentation.base.BaseFragment
 import com.boostcampwm2023.snappoint.presentation.viewpost.ViewPostViewModel
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
@@ -43,8 +45,23 @@ class PostFragment : BaseFragment<FragmentPostBinding>(R.layout.fragment_post) {
                             viewPostViewModel.finishPostView()
                         }
                     }
+
+                    PostEvent.SavePost -> {
+                        saveCurrentPost()
+                    }
                 }
             }
+        }
+    }
+
+    private fun saveCurrentPost() {
+        with(viewPostViewModel.post.value) {
+            postViewModel.saveCurrentPost(
+                title,
+                author,
+                timeStamp,
+                postBlocks
+            )
         }
     }
 }
