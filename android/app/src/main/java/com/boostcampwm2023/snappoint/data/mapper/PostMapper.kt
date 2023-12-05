@@ -37,9 +37,7 @@ fun PostBlock.asPostBlockState(): PostBlockState {
                     position = this.asPositionState(),
                 )
             }
-
         }
-
     }
 }
 
@@ -89,7 +87,7 @@ fun GetAroundPostResponse.asPostSummaryState(): PostSummaryState {
 }
 
 fun SerializedPost.asPostSummaryState(): PostSummaryState {
-    val localPost = PostConverter.jsonToPost(this.json)
+    val localPost = this.post
     return PostSummaryState(
         title = localPost.title,
         author = localPost.author,
@@ -114,9 +112,8 @@ fun LocalBlock.asPostBlockState(): PostBlockState {
             address = this.address
         )
 
-        else -> PostBlockState.IMAGE(
-            content = this.content,
-            description = this.description
+        else -> PostBlockState.TEXT(
+            content = this.content
         )
     }
 }
@@ -130,13 +127,11 @@ fun LocalPosition.asPositionState(): PositionState {
 
 fun PostSummaryState.asSerializedPost(): SerializedPost {
     return SerializedPost(
-        PostConverter.postToJson(
-            LocalPost(
-                title = this.title,
-                author = this.author,
-                timestamp = this.timeStamp,
-                blocks = this.postBlocks.map { it.asLocalBlock() }
-            )
+        LocalPost(
+            title = this.title,
+            author = this.author,
+            timestamp = this.timeStamp,
+            blocks = this.postBlocks.map { it.asLocalBlock() }
         )
     )
 }

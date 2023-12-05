@@ -25,7 +25,7 @@ class SubscriptionViewModel @Inject constructor(
     fun insertPost(localPost: LocalPost) {
         viewModelScope.launch(Dispatchers.IO) {
             // TODO insert 삭제, delete 추가
-            localPostRepository.insertPosts(SerializedPost(PostConverter.postToJson(localPost)).asPostSummaryState())
+            localPostRepository.insertPosts(SerializedPost(localPost).asPostSummaryState())
         }
     }
 

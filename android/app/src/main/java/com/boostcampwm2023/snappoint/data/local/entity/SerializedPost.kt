@@ -9,6 +9,6 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class SerializedPost(
     @PrimaryKey
-    @ColumnInfo(name = "json")
-    val json: String
+    @ColumnInfo(name = "post")
+    val post: LocalPost
 )

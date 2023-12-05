@@ -24,7 +24,7 @@ object LocalModule {
         Room.databaseBuilder(
             context,
             LocalPostDatabase::class.java,
-            "database01",
+            "database02",
         ).build()
 
     @Provides
@@ -34,11 +34,6 @@ object LocalModule {
 
     @Provides
     @Singleton
-    fun provideLocalPostDataSource(localPostDao: LocalPostDao): LocalPostDataSource =
-        LocalPostDataSource(localPostDao)
-
-    @Provides
-    @Singleton
-    fun provideLocalPostRepository(localPostDataSource: LocalPostDataSource): LocalPostRepository =
-        LocalPostRepositoryImpl(localPostDataSource)
+    fun provideLocalPostRepository(localPostDao: LocalPostDao): LocalPostRepository =
+        LocalPostRepositoryImpl(localPostDao)
 }
