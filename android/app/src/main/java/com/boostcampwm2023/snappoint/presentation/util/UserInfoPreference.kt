@@ -18,14 +18,13 @@ class UserInfoPreference @Inject constructor(@ApplicationContext context: Contex
     }
 
     fun setUserAuthData(email: String, password: String) {
-        UserInfo.setEmail(email)
         preferences.edit().putString(EMAIL_KEY, email).apply()
         preferences.edit().putString(PASSWORD_KEY, password).apply()
     }
 
     fun clearUserAuthData() {
-        preferences.edit().putString("email", "").apply()
-        preferences.edit().putString("password", "").apply()
+        preferences.edit().putString(EMAIL_KEY, DEFAULT_VALUE).apply()
+        preferences.edit().putString(PASSWORD_KEY, DEFAULT_VALUE).apply()
     }
 
     companion object {
