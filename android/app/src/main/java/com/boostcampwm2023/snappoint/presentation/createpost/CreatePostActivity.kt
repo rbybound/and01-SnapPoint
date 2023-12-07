@@ -3,6 +3,7 @@ package com.boostcampwm2023.snappoint.presentation.createpost
 import android.Manifest
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.graphics.BitmapFactory
 import android.os.Build
 import android.os.Bundle
 import android.provider.MediaStore
@@ -19,12 +20,19 @@ import com.boostcampwm2023.snappoint.databinding.ActivityCreatePostBinding
 import com.boostcampwm2023.snappoint.presentation.base.BaseActivity
 import com.boostcampwm2023.snappoint.presentation.markerpointselector.MarkerPointSelectorActivity
 import com.boostcampwm2023.snappoint.presentation.model.PositionState
+import com.boostcampwm2023.snappoint.presentation.model.PostBlockState
+import com.boostcampwm2023.snappoint.presentation.model.PostSummaryState
 import com.boostcampwm2023.snappoint.presentation.util.MetadataUtil
 import com.boostcampwm2023.snappoint.presentation.util.getBitmapFromUri
 import com.boostcampwm2023.snappoint.presentation.util.resizeBitmap
 import com.boostcampwm2023.snappoint.presentation.util.untilSixAfterDecimalPoint
+import com.squareup.okhttp.Dispatcher
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import kotlinx.serialization.json.Json
+import java.net.URL
 
 @AndroidEntryPoint
 class CreatePostActivity : BaseActivity<ActivityCreatePostBinding>(R.layout.activity_create_post) {
@@ -77,7 +85,7 @@ class CreatePostActivity : BaseActivity<ActivityCreatePostBinding>(R.layout.acti
         initBinding()
         collectViewModelData()
 
-        Log.d("LOG", "${args.post}")
+        loadPost()
     }
 
     private fun initBinding() {
@@ -111,6 +119,32 @@ class CreatePostActivity : BaseActivity<ActivityCreatePostBinding>(R.layout.acti
                                 startMapActivityAndFindAddress(event.index, event.position)
                             }
                         }
+                    }
+                }
+            }
+        }
+    }
+
+    private fun loadPost() {
+        if (args.post.isBlank()) {
+            return
+        }
+
+        val prevPost: PostSummaryState = Json.decodeFromString<PostSummaryState>(args.post)
+        with(viewModel) {
+            updateUuid(prevPost.uuid)
+            prevPost.postBlocks.forEach { block ->
+                when (block) {
+                    is PostBlockState.TEXT -> {
+                        addTextBlock(block.content)
+                    }
+
+                    is PostBlockState.IMAGE -> {
+                        addImageBlock(block)
+                    }
+
+                    is PostBlockState.VIDEO -> {
+                        TODO()
                     }
                 }
             }
