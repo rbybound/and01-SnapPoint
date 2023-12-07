@@ -43,8 +43,6 @@ class MapManager(private val viewModel: MainViewModel, private val context: Cont
     var drawnRoute: Polyline? = null
     var prevSelectedIndex = -1
 
-    private val markers: MutableList<Marker> = mutableListOf()
-
     fun moveCamera(latitude: Double, longitude: Double, zoom: Float? = null) {
         zoom?.let {
             googleMap?.moveCamera(CameraUpdateFactory.newLatLngZoom(LatLng(latitude, longitude),zoom))
